@@ -32,56 +32,42 @@ const App = () => {
 
   return (
     <div data-theme={theme}>
-      {/* Navbar only when logged in */}
+
       {authUser && <Navbar />}
 
       <Routes>
-
-        {/* Default route always redirect to login */}
         <Route path="/" element={<Navigate to="/login" />} />
-
-        {/* Login */}
         <Route
           path="/login"
           element={
             !authUser ? <LoginPage /> : <Navigate to="/home" />
           }
         />
-
-        {/* Signup */}
         <Route
           path="/signup"
           element={
             !authUser ? <SignUpPage /> : <Navigate to="/home" />
           }
         />
-
-        {/* Home (Protected) */}
         <Route
           path="/home"
           element={
             authUser ? <HomePage /> : <Navigate to="/login" />
           }
         />
-
-        {/* Profile (Protected) */}
         <Route
           path="/profile"
           element={
             authUser ? <ProfilePage /> : <Navigate to="/login" />
           }
         />
-
-        {/* Settings (Protected) */}
         <Route
           path="/settings"
           element={
             authUser ? <SettingsPage /> : <Navigate to="/login" />
           }
         />
-
       </Routes>
-
       <Toaster />
     </div>
   );
