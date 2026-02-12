@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { useAuth } from "../config/useAuth";
 import { useChat } from "../config/useChat";
 import GroupDetailsModal from "./GroupDetailsModal";
-import { useState } from "react";   // ✅ IMPORTANT
+import { useState } from "react";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChat();
@@ -18,8 +18,6 @@ const ChatHeader = () => {
       <div className="p-2.5 border-b border-base-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-
-            {/* Avatar */}
             <div className="avatar">
               <div className="size-10 rounded-full relative">
                 <img
@@ -36,8 +34,6 @@ const ChatHeader = () => {
                 />
               </div>
             </div>
-
-            {/* Info */}
             <div>
               <h3 className="font-medium">
                 {isGroup
@@ -55,10 +51,7 @@ const ChatHeader = () => {
             </div>
           </div>
 
-          {/* Right Side */}
           <div className="flex items-center gap-4">
-
-            {/* View Details only for group */}
             {isGroup && (
               <button
                 onClick={() => setShowDetails(true)}
@@ -68,7 +61,6 @@ const ChatHeader = () => {
               </button>
             )}
 
-            {/* Close */}
             <button onClick={() => setSelectedUser(null)}>
               <X />
             </button>
@@ -76,7 +68,6 @@ const ChatHeader = () => {
         </div>
       </div>
 
-      {/* 🔥 Modal Render */}
       {isGroup && showDetails && (
         <GroupDetailsModal
           group={selectedUser}

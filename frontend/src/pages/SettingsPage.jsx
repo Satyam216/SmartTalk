@@ -43,7 +43,6 @@ const SettingsPage = () => {
           ))}
         </div>
 
-        {/* Preview Section */}
         <h3 className="text-lg font-semibold mb-3">Preview</h3>
         <div className="rounded-xl border border-base-300 overflow-hidden bg-base-100 shadow-lg">
           <div className="p-4 bg-base-200">
@@ -63,7 +62,6 @@ const SettingsPage = () => {
                   </div>
                 </div>
 
-                {/* Chat Messages */}
                 <div className="p-4 space-y-4 min-h-[200px] max-h-[200px] overflow-y-auto bg-base-100">
                   {PREVIEW_MESSAGES.map((message) => (
                     <div
@@ -89,8 +87,6 @@ const SettingsPage = () => {
                     </div>
                   ))}
                 </div>
-
-                {/* Chat Input */}
                 <div className="p-4 border-t border-base-300 bg-base-100">
                   <div className="flex gap-2">
                     <input

@@ -45,8 +45,6 @@ export const getMyGroups = async (req, res) => {
       .populate("members", "fullName profilePic")
       .populate("admin", "fullName profilePic");
 
-    console.log(JSON.stringify(groups, null, 2)); // ✅ yaha allowed hai
-
     res.status(200).json(groups);
   } catch (error) {
     console.log("Error fetching groups:", error.message);
@@ -85,7 +83,7 @@ export const getGroupMessages = async (req, res) => {
   try {
     const { groupId } = req.params;
 
-    const messages = await Message.find({ groupId });
+    const messages = await Message.find({ groupId }).populate("senderId", "fullName profilePic");
 
     res.status(200).json(messages);
   } catch (error) {

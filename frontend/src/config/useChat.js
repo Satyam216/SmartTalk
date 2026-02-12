@@ -51,36 +51,30 @@ export const useChat = create((set, get) => ({
 
   try {
     let res;
-
-    // 🔥 If Group
     if (selectedUser.members) {
       res = await axiosInstance.post(
         `/groups/${selectedUser._id}/messages`,
         messageData
       );
     } 
-    // 🔥 If 1v1
     else {
       res = await axiosInstance.post(
         `/messages/send/${selectedUser._id}`,
         messageData
       );
     }
-
     set({ messages: [...messages, res.data] });
 
   } catch (error) {
     toast.error(error.response?.data?.message || "Message send failed");
   }
 },
-
   subscribeToMessages: () => {
   const socket = useAuth.getState().socket;
   const { selectedUser } = get();
 
   if (!socket || !selectedUser) return;
 
-  // 🔥 1v1 Messages
   socket.on("newMessage", (newMessage) => {
     if (
       !selectedUser.members &&
@@ -92,7 +86,6 @@ export const useChat = create((set, get) => ({
     }
   });
 
-  // 🔥 Group Messages
   socket.on("newGroupMessage", (msg) => {
     if (
       selectedUser.members &&
@@ -104,8 +97,6 @@ export const useChat = create((set, get) => ({
     }
   });
 },
-
-
   unsubscribeFromMessages: () => {
   const socket = useAuth.getState().socket;
   if (!socket) return;

@@ -72,7 +72,7 @@ const ChatContainer = () => {
               <div className="size-10 rounded-full border">
                 <img
                   src={
-                    message.senderId === authUser._id
+                    message.senderId?._id === authUser._id
                       ? authUser.profilePic || "/avatar.png"
                       : isGroup
                       ? message.senderId?.profilePic || "/avatar.png"
@@ -83,11 +83,11 @@ const ChatContainer = () => {
               </div>
             </div>
 
-            <div className="chat-header mb-1">
-              <time className="text-xs opacity-50 ml-1">
-                {formatMessageTime(message.createdAt)}
-              </time>
-            </div>
+            {selectedUser.members && (
+              <p className="text-xs font-medium mb-1">
+                {message.senderId?.fullName}
+              </p>
+            )}
 
             <div className="chat-bubble flex flex-col">
               {message.image && (
@@ -99,6 +99,14 @@ const ChatContainer = () => {
               )}
               {message.text && <p>{message.text}</p>}
             </div>
+              
+            <div className=" mb-1">
+              <time className="text-xs opacity-50 ml-1">
+                {formatMessageTime(message.createdAt)}
+              </time>
+            </div>
+
+            
           </div>
         ))}
       </div>

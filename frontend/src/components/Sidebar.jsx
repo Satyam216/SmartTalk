@@ -6,7 +6,6 @@ import { Users, Plus } from "lucide-react";
 import { axiosInstance } from "../lib/axios";
 import GroupModal from "./GroupModal";
 
-
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChat();
   const { onlineUsers } = useAuth();
@@ -15,21 +14,21 @@ const Sidebar = () => {
   const [groups, setGroups] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
+  //Fetch Groups
+    useEffect(() => {
+      const fetchGroups = async () => {
+        try {
+          const res = await axiosInstance.get("/groups");
+          setGroups(res.data);
+        } catch (err) {
+          console.log("Group fetch error", err);
+        }
+      };
 
-  // 🔥 Fetch Groups
-  useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const res = await axiosInstance.get("/groups");
-        setGroups(res.data);
-      } catch (err) {
-        console.log("Group fetch error", err);
-      }
-    };
-    fetchGroups();
-  }, []);
+      fetchGroups();
+    }, [selectedUser]);
 
-  // 🔥 Fetch Users (1v1 untouched)
+  // Fetch Users
   useEffect(() => {
     getUsers();
   }, [getUsers]);
@@ -43,8 +42,6 @@ const Sidebar = () => {
   return (
   <>
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
-      
-      {/* HEADER */}
       <div className="border-b border-base-300 w-full p-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -78,7 +75,6 @@ const Sidebar = () => {
 
       <div className="overflow-y-auto w-full py-3">
 
-        {/* PERSONAL SECTION */}
         <p className="px-3 text-xs text-zinc-400 mb-2">Personal</p>
 
         {filteredUsers.map((user) => (
@@ -111,7 +107,6 @@ const Sidebar = () => {
           </button>
         ))}
 
-        {/* GROUP SECTION */}
         {groups.length > 0 && (
           <>
             <p className="px-3 mt-4 text-xs text-zinc-400 mb-2">Groups</p>
@@ -152,8 +147,6 @@ const Sidebar = () => {
         )}
       </div>
     </aside>
-
-    {/* 🔥 MODAL RENDER HERE */}
     {showModal && <GroupModal onClose={() => setShowModal(false)} />}
   </>
 );

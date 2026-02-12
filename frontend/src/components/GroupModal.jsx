@@ -7,8 +7,7 @@ const GroupModal = ({ onClose }) => {
   const [users, setUsers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [groupName, setGroupName] = useState("");
-
-  // Fetch all users
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -42,7 +41,7 @@ const GroupModal = ({ onClose }) => {
 
       toast.success("Group created successfully");
       onClose();
-      window.location.reload(); // refresh sidebar
+      window.location.reload();
     } catch (err) {
       toast.error("Failed to create group");
     }
@@ -68,8 +67,6 @@ const GroupModal = ({ onClose }) => {
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
         />
-
-        {/* Users List */}
         <div className="max-h-60 overflow-y-auto space-y-2">
           {users.map((user) => (
             <div
@@ -89,7 +86,6 @@ const GroupModal = ({ onClose }) => {
           ))}
         </div>
 
-        {/* Create Button */}
         <button
           onClick={createGroup}
           className="btn btn-primary w-full mt-4"
