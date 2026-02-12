@@ -1,19 +1,52 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
 
-export default function App() {
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/SignUpPage";
+import LoginPage from "./pages/LoginPage";
+import SettingsPage from "./pages/SettingsPage";
+import ProfilePage from "./pages/ProfilePage";
+
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./config/useAuth";
+import { useTheme } from "./config/useTheme";
+import { useEffect } from "react";
+
+import { Loader } from "lucide-react";
+import { Toaster } from "react-hot-toast";
+
+const App = () => {
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuth();
+  const { theme } = useTheme();
+
+  console.log({ onlineUsers });
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  console.log({ authUser });
+
+  if (isCheckingAuth && !authUser)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    );
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <div data-theme={theme}>
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
+        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
+        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
+      </Routes>
+
+      <Toaster />
+    </div>
   );
-}
+};
+export default App;
