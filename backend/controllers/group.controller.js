@@ -1,5 +1,25 @@
 import Group from "../models/group.js";
 import Message from "../models/message.js";
+import { io, getReceiverSocketId } from "../config/socket.js";
+
+
+export const addMember = async (req, res) => {
+  const { groupId, memberId } = req.body;
+
+  const group = await Group.findById(groupId);
+
+  if (group.admin.toString() !== req.user._id.toString()) {
+    return res.status(403).json({ message: "Only admin can add members" });
+  }
+
+  if (!group.members.includes(memberId)) {
+    group.members.push(memberId);
+    await group.save();
+  }
+
+  res.json({ message: "Member added" });
+};
+
 
 export const createGroup = async (req, res) => {
   try {
@@ -25,46 +45,51 @@ export const getMyGroups = async (req, res) => {
       .populate("members", "fullName profilePic")
       .populate("admin", "fullName profilePic");
 
+    console.log(JSON.stringify(groups, null, 2)); // ✅ yaha allowed hai
+
     res.status(200).json(groups);
   } catch (error) {
     console.log("Error fetching groups:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
-  console.log(JSON.stringify(groups, null, 2));
 };
 
 export const sendGroupMessage = async (req, res) => {
-  const { groupId } = req.params;
-  const { text, image } = req.body;
+  try {
+    const { groupId } = req.params;
+    const { text, image } = req.body;
 
-  const message = await Message.create({
-    senderId: req.user._id,
-    groupId,
-    text,
-    image,
-  });
+    const message = await Message.create({
+      senderId: req.user._id,
+      groupId,
+      text,
+      image,
+    });
 
-  const group = await Group.findById(groupId);
+    const group = await Group.findById(groupId);
 
-  group.members.forEach((memberId) => {
-    const socketId = getReceiverSocketId(memberId.toString());
-    if (socketId) {
-      io.to(socketId).emit("newGroupMessage", message);
-    }
-  });
+    group.members.forEach((memberId) => {
+      const socketId = getReceiverSocketId(memberId.toString());
+      if (socketId) {
+        io.to(socketId).emit("newGroupMessage", message);
+      }
+    });
 
-  res.status(201).json(message);
+    res.status(201).json(message);
+  } catch (error) {
+    res.status(500).json({ message: "Error sending group message" });
+  }
 };
 
 export const getGroupMessages = async (req, res) => {
   try {
     const { groupId } = req.params;
 
-    const messages = await Message.find({ groupId }).populate("senderId", "fullName profilePic");
+    const messages = await Message.find({ groupId });
 
-    res.json(messages);
+    res.status(200).json(messages);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error fetching group messages" });
   }
 };
 

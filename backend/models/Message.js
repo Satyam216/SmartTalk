@@ -10,7 +10,6 @@ const messageSchema = new mongoose.Schema(
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     text: {
       type: String,
@@ -21,7 +20,6 @@ const messageSchema = new mongoose.Schema(
     groupId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Group",
-      default: null,
     },
   },
   { timestamps: true }

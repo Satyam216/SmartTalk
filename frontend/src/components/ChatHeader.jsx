@@ -25,7 +25,7 @@ const ChatHeader = () => {
                 <img
                   src={
                     isGroup
-                      ? "/group.png"
+                      ? "/group-icon.png"
                       : selectedUser.profilePic || "/avatar.png"
                   }
                   alt={
