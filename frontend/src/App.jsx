@@ -14,36 +14,77 @@ import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
-  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuth();
+  const { authUser, checkAuth, isCheckingAuth } = useAuth();
   const { theme } = useTheme();
-
-  console.log({ onlineUsers });
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log({ authUser });
-
-  if (isCheckingAuth && !authUser)
+  // 🔄 Show loader while checking auth
+  if (isCheckingAuth) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
       </div>
     );
+  }
 
   return (
     <div data-theme={theme}>
-      <Navbar />
+      {/* Navbar only when logged in */}
+      {authUser && <Navbar />}
+
       <Routes>
-        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
+
+        {/* Default route always redirect to login */}
+        <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* Login */}
+        <Route
+          path="/login"
+          element={
+            !authUser ? <LoginPage /> : <Navigate to="/home" />
+          }
+        />
+
+        {/* Signup */}
+        <Route
+          path="/signup"
+          element={
+            !authUser ? <SignUpPage /> : <Navigate to="/home" />
+          }
+        />
+
+        {/* Home (Protected) */}
+        <Route
+          path="/home"
+          element={
+            authUser ? <HomePage /> : <Navigate to="/login" />
+          }
+        />
+
+        {/* Profile (Protected) */}
+        <Route
+          path="/profile"
+          element={
+            authUser ? <ProfilePage /> : <Navigate to="/login" />
+          }
+        />
+
+        {/* Settings (Protected) */}
+        <Route
+          path="/settings"
+          element={
+            authUser ? <SettingsPage /> : <Navigate to="/login" />
+          }
+        />
+
       </Routes>
+
       <Toaster />
     </div>
   );
 };
+
 export default App;
