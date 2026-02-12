@@ -20,7 +20,6 @@ const ChatContainer = () => {
   const { authUser } = useAuth();
   const messageEndRef = useRef(null);
 
-  // ✅ Single Effect Only
   useEffect(() => {
     if (!selectedUser) return;
 
