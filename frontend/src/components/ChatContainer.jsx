@@ -59,55 +59,62 @@ const ChatContainer = () => {
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message._id}
-            className={`chat ${
-              message.senderId === authUser._id ? "chat-end" : "chat-start"
-            }`}
-            ref={messageEndRef}
-          >
-            <div className="chat-image avatar">
-              <div className="size-10 rounded-full border">
-                <img
-                  src={
-                    message.senderId?._id === authUser._id
-                      ? authUser.profilePic || "/avatar.png"
-                      : isGroup
-                      ? message.senderId?.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
-                  }
-                  alt="profile"
-                />
+        {messages.map((message) => {
+            const senderId =
+              typeof message.senderId === "object"
+                ? message.senderId._id
+                : message.senderId;
+
+            const isSender =
+              senderId?.toString() === authUser._id?.toString();
+
+            return (
+              <div
+                key={message._id}
+                className={`chat ${isSender ? "chat-end" : "chat-start"}`}
+                ref={messageEndRef}
+              >
+                <div className="chat-image avatar">
+                  <div className="size-10 rounded-full border">
+                    <img
+                      src={
+                        isSender
+                          ? authUser.profilePic || "/avatar.png"
+                          : isGroup
+                          ? message.senderId?.profilePic || "/avatar.png"
+                          : selectedUser.profilePic || "/avatar.png"
+                      }
+                      alt="profile"
+                    />
+                  </div>
+                </div>
+
+                {isGroup && !isSender && (
+                  <p className="text-xs font-medium mb-1">
+                    {message.senderId?.fullName}
+                  </p>
+                )}
+
+                <div className="chat-bubble flex flex-col">
+                  {message.image && (
+                    <img
+                      src={message.image}
+                      alt="Attachment"
+                      className="sm:max-w-[200px] rounded-md mb-2"
+                    />
+                  )}
+                  {message.text && <p>{message.text}</p>}
+                </div>
+
+                <div className="mb-1">
+                  <time className="text-xs opacity-50 ml-1">
+                    {formatMessageTime(message.createdAt)}
+                  </time>
+                </div>
               </div>
-            </div>
+            );
+          })}
 
-            {selectedUser.members && (
-              <p className="text-xs font-medium mb-1">
-                {message.senderId?.fullName}
-              </p>
-            )}
-
-            <div className="chat-bubble flex flex-col">
-              {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
-              )}
-              {message.text && <p>{message.text}</p>}
-            </div>
-              
-            <div className=" mb-1">
-              <time className="text-xs opacity-50 ml-1">
-                {formatMessageTime(message.createdAt)}
-              </time>
-            </div>
-
-            
-          </div>
-        ))}
       </div>
 
       <MessageInput />

@@ -19,23 +19,23 @@ https://smarttalk-backend-xgi1.onrender.com
 
 ### 🔹 Frontend
 - React (Vite)
-- Tailwind CSS
-- DaisyUI
-- Zustand (State Management)
-- Axios
-- React Router
-- Socket.io Client
-- Lucide Icons
+- Tailwind CSS : v3.4.17
+- DaisyUI : v4.12.14
+- Zustand (State Management) : v5.0.11
+- Axios : v1.13.5
+- React Router : v7.13.0
+- Socket.io Client : v4.8.3
+- Lucide Icons : v0.563.0
 
 ### 🔹 Backend
-- Node.js
-- Express.js
-- MongoDB (Mongoose)
-- Socket.io
-- JWT Authentication
-- Cloudinary (Image Storage)
-- Cookie Parser
-- CORS
+- Node.js : v20.19.5
+- Express.js : v5.2.1
+- MongoDB (Mongoose) : v9.2.0
+- Socket.io : v4.8.3
+- JWT Authentication : v9.0.3
+- Cloudinary (Image Storage) : v1.41.3
+- Cookie Parser : v1.4.7
+- CORS : v2.8.6
 
 ---
 
