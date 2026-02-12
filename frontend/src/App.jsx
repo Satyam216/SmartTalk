@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import { AuthProvider } from "./context/AuthContext";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-      <div className="bg-red-500 text-white p-4 rounded-lg mt-4">
-        Click on the Vite and React logos to learn more
-      </div>
-  
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
-
-export default App
